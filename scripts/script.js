@@ -1,4 +1,3 @@
-
 const gameBoard = (function (){
     let _boardSize = 3;
     let board = []
@@ -18,7 +17,35 @@ const gameBoard = (function (){
         return board;
     }
 
+    function addX(i, j){
+        if(board[i][j] == null){
+            board[i][j] = "X";
+        } else {
+            console.log("Error! That square has already been filled.");
+        }
+    }
+
+    function addO(i, j){
+        if(board[i][j] == null){
+            board[i][j] = "O";
+        } else {
+            console.log("Error! That square has already been filled.");
+        }
+    }
+
+    function displayBoard(){
+        let outputString = "";
+        for(let i = 0; i<_boardSize; i++){
+            for(let j = 0; j<_boardSize; j++){
+                outputString += board[i][j];
+            }
+            outputString += (" \n ");
+        }
+        return outputString;
+    }
+
     return{
-        setBoardSize, createBoard,
+        setBoardSize, createBoard, addX, addO, displayBoard
     };
 })();
+
