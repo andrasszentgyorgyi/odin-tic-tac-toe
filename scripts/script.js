@@ -2,6 +2,7 @@ const gameBoard = (function () {
     let _boardSize = 3;
     let board = []
     let lastPlaced;
+    let placedCount;
 
     function setBoardSize(val) {
         _boardSize = val;
@@ -15,6 +16,7 @@ const gameBoard = (function () {
             }
             board[i] = row;
         }
+        placedCount = 0;
         return board;
     }
 
@@ -22,6 +24,7 @@ const gameBoard = (function () {
         if (board[i][j] == null) {
             board[i][j] = "X";
             lastPlaced = "X";
+            placedCount++;
             checkWin();
         } else {
             console.log("Error! That square has already been filled.");
@@ -32,6 +35,7 @@ const gameBoard = (function () {
         if (board[i][j] == null) {
             board[i][j] = "O";
             lastPlaced = "O";
+            placedCount++;
             checkWin();
         } else {
             console.log("Error! That square has already been filled.");
@@ -53,6 +57,13 @@ const gameBoard = (function () {
         //[(0,0), (0,1), (0,2)], [(1,0), (1,1), (1,2)], [(2,0), (2,1), (2,2)] HORIZONTAL
         //[(0,0), (1,0), (2,0)], [(0,1), (1,1), (2,1)], [(0,2), (1,2), (2,2)] VERTICAL
         //[(0,0), (1,1), (2,2)] , [(0,2), (1,1), (2,0)] DIAGONAL
+
+        //check for draw
+        console.log("Placedcount:" + placedCount);
+        if(placedCount == _boardSize*_boardSize){
+            console.log("Draw!");
+            return;
+        }
         if (lastPlaced != null) {
             //HORIZONTAL
             for (let i = 0; i < _boardSize; i++) {
