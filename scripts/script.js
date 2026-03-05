@@ -142,10 +142,9 @@ const gameBoard = (function () {
 
 
 const displayGame = (function (){
+    let container = document.querySelector(".gameContainer");
     const body = document.querySelector("body");
-    const container = document.createElement("div");
     const board = document.createElement("div");
-    container.classList.add("gameContainer");
     board.classList.add("gameBoard");
 
 
@@ -158,7 +157,6 @@ const displayGame = (function (){
             board.appendChild(cell);
         }
         container.appendChild(board);
-        body.appendChild(container);
 
     }
     createBoard();
