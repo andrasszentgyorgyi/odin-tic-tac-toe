@@ -8,7 +8,11 @@ const gameBoard = (function () {
         _boardSize = val;
     }
 
-    function createBoard() {
+    function getBoardSize(){
+        return this._boardSize;
+    }
+
+    function createArray() {
         for (let i = 0; i < _boardSize; i++) {
             let row = [];
             for (let j = 0; j < _boardSize; j++) {
@@ -20,9 +24,14 @@ const gameBoard = (function () {
         return board;
     }
 
+    function getArrayElement(i,j){
+        return this.board[i][j];
+    }
+
     function addX(i, j) {
         if (board[i][j] == null) {
             board[i][j] = "X";
+            gameBoard.updateBoard(i,j);
             lastPlaced = "X";
             placedCount++;
             checkWin();
@@ -34,6 +43,7 @@ const gameBoard = (function () {
     function addO(i, j) {
         if (board[i][j] == null) {
             board[i][j] = "O";
+            gameBoard.updateBoard(i,j);
             lastPlaced = "O";
             placedCount++;
             checkWin();
@@ -42,7 +52,7 @@ const gameBoard = (function () {
         }
     }
 
-    function displayBoard() {
+    function displayArray() {
         let outputString = "";
         for (let i = 0; i < _boardSize; i++) {
             for (let j = 0; j < _boardSize; j++) {
@@ -92,7 +102,7 @@ const gameBoard = (function () {
                     }
                 }
             }
-            //DIAGONAL
+            //DIAGONALS
             if(board[0][0] == lastPlaced){
                 if(board[1][1] == lastPlaced){
                     if(board[2][2] == lastPlaced){
@@ -116,7 +126,35 @@ const gameBoard = (function () {
     }
 
     return {
-        setBoardSize, createBoard, addX, addO, displayBoard, checkWin
+        setBoardSize, createArray, addX, addO, displayArray, checkWin, getArrayElement
     };
+})();
+
+
+const displayGame = (function (){
+    const body = document.querySelector("body");
+    const container = document.createElement("div");
+    const gameBoard = document.createElement("div");
+    container.classList.add("gameContainer");
+    gameBoard.classList.add("gameBoard");
+
+
+    function createBoard(){
+        for(let i = 0; i<9; i++){
+            let cell = document.createElement("div")
+            cell.classList.add("gameCell");
+
+            gameBoard.appendChild(cell);
+        }
+        container.appendChild(gameBoard);
+        body.appendChild(container);
+
+    }
+    createBoard();
+    function updateBoard(i,j){
+        container.childNodes[i+j].textContent = gameBoard.getArrayElement(i,j);
+    }
+
+    return updateBoard;
 })();
 
