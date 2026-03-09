@@ -1,75 +1,73 @@
-const gameBoard = (function () {
-    let _boardSize = 3;
-    let board = []
-    let lastPlaced;
-    let placedCount;
-    let nextTurn = "O";
+class gameBoard {
 
-    function setBoardSize(val) {
-        _boardSize = val;
+    _boardSize = 3;
+    board = []
+    lastPlaced;
+    placedCount;
+    _nextTurn = "O";
+
+    constructor() {
+        this.createArray();
     }
 
-    function getNextTurn(){
-        return nextTurn;
-    }
-
-    function createArray() {
-        board = []
-        for (let i = 0; i < _boardSize; i++) {
+    createArray() {
+        this.board = []
+        for (let i = 0; i < this._boardSize; i++) {
             let row = [];
-            for (let j = 0; j < _boardSize; j++) {
+            for (let j = 0; j < this._boardSize; j++) {
                 row[j] = null;
             }
-            board[i] = row;
+            this.board[i] = row;
         }
-        placedCount = 0;
-        return board;
-        
-        
+        this.placedCount = 0;
+        return this.board;
     }
-    createArray();
 
-    function getArrayElement(i, j) {
+    setDisplay(displayInstance) {
+        this.display = displayInstance;
+    }
+
+    getArrayElement(i, j) {
         return this.board[i][j];
     }
 
-    function onClick(index) {
+    onClick(index) {
         let row = Math.floor(index / 3);
         let column = index % 3;
-        if (nextTurn === "O") {
-            addO(row, column);
+        if (this.nextTurn === "O") {
+            this.addO(row, column);
         } else {
-            addX(row, column);
+            this.addX(row, column);
         }
     }
 
-    function addX(i, j) {
-        if (board[i][j] == null) {
-            board[i][j] = "X";
-            displayGame.updateBoard(i, j, "X");
-            nextTurn = "O";
-            lastPlaced = "X";
-            placedCount++;
-            checkWin();
-        } else {
-            console.log("Error! That square has already been filled.");
-        }
-    }
-
-    function addO(i, j) {
-        if (board[i][j] == null) {
-            board[i][j] = "O";
-            displayGame.updateBoard(i, j, "O");
-            nextTurn = "X";
-            lastPlaced = "O";
-            placedCount++;
-            checkWin();
+    addX(i, j) {
+        if (this.board[i][j] == null) {
+            this.board[i][j] = "X";
+            this.display.updateBoard(i, j, "X");
+            this.nextTurn = "O";
+            this.lastPlaced = "X";
+            this.placedCount++;
+            this.checkWin();
         } else {
             console.log("Error! That square has already been filled.");
         }
     }
 
-    function displayArray() {
+    addO(i, j) {
+        if (this.board[i][j] == null) {
+            this.board[i][j] = "O";
+            this.display.updateBoard(i, j, "O");
+            this.nextTurn = "X";
+            this.lastPlaced = "O";
+            this.placedCount++;
+            this.checkWin();
+        } else {
+            console.log("Error! That square has already been filled.");
+        }
+    }
+
+    displayArray() {
         let outputString = "";
         for (let i = 0; i < _boardSize; i++) {
             for (let j = 0; j < _boardSize; j++) {
@@ -80,131 +78,141 @@ const gameBoard = (function () {
         return outputString;
     }
 
-    function checkWin() {
+    checkWin() {
         //[(0,0), (0,1), (0,2)], [(1,0), (1,1), (1,2)], [(2,0), (2,1), (2,2)] HORIZONTAL
         //[(0,0), (1,0), (2,0)], [(0,1), (1,1), (2,1)], [(0,2), (1,2), (2,2)] VERTICAL
         //[(0,0), (1,1), (2,2)] , [(0,2), (1,1), (2,0)] DIAGONAL
 
         //check for draw
-        if (lastPlaced != null) {
+        if (this.lastPlaced != null) {
             //HORIZONTAL
-            for (let i = 0; i < _boardSize; i++) {
-                for (let j = 0; j < _boardSize; j++) {
-                    if (board[i][j] != lastPlaced) {
+            for (let i = 0; i < this._boardSize; i++) {
+                for (let j = 0; j < this._boardSize; j++) {
+                    if (this.board[i][j] != this.lastPlaced) {
                         break;
-                    } if (j == _boardSize - 1) {
-                        if (board[i][j] == lastPlaced) {
-                            displayGame.declareWinner(lastPlaced + " wins!");
-                            return lastPlaced;
+                    } if (j == this._boardSize - 1) {
+                        if (this.board[i][j] == this.lastPlaced) {
+                            this.display.declareWinner(this.lastPlaced + " wins!");
+                            return this.lastPlaced;
                         }
                     }
                 }
             }
 
             //VERTICAL
-            for (let i = 0; i < _boardSize; i++) {
-                for (let j = 0; j < _boardSize; j++) {
-                    if (board[j][i] != lastPlaced) {
+            for (let i = 0; i < this._boardSize; i++) {
+                for (let j = 0; j < this._boardSize; j++) {
+                    if (this.board[j][i] != this.lastPlaced) {
                         break;
-                    } if (j == _boardSize - 1) {
-                        if (board[j][i] == lastPlaced) {
-                            displayGame.declareWinner(lastPlaced + " wins!");
-                            return lastPlaced;
+                    } if (j == this._boardSize - 1) {
+                        if (this.board[j][i] == this.lastPlaced) {
+                            this.display.declareWinner(this.lastPlaced + " wins!");
+                            return this.lastPlaced;
                         }
                     }
                 }
             }
             //DIAGONALS
-            if (board[0][0] == lastPlaced) {
-                if (board[1][1] == lastPlaced) {
-                    if (board[2][2] == lastPlaced) {
-                        displayGame.declareWinner(lastPlaced + " wins!");
-                        return lastPlaced;
+            if (this.board[0][0] == this.lastPlaced) {
+                if (this.board[1][1] == this.lastPlaced) {
+                    if (this.board[2][2] == this.lastPlaced) {
+                        this.display.declareWinner(this.lastPlaced + " wins!");
+                        return this.lastPlaced;
                     }
                 }
             }
-            if (board[0][2] == lastPlaced) {
-                if (board[1][1] == lastPlaced) {
-                    if (board[2][0] == lastPlaced) {
-                        displayGame.declareWinner(lastPlaced + " wins!");
-                        return lastPlaced;
+            if (this.board[0][2] == this.lastPlaced) {
+                if (this.board[1][1] == this.lastPlaced) {
+                    if (this.board[2][0] == this.lastPlaced) {
+                        this.display.declareWinner(this.lastPlaced + " wins!");
+                        return this.lastPlaced;
                     }
                 }
             }
 
         }
-        if (placedCount == _boardSize * _boardSize) {
-            displayGame.declareWinner("Draw!");
+        if (this.placedCount == this._boardSize * this._boardSize) {
+            this.display.declareWinner("Draw!");
             return;
         }
         return;
     }
 
-    return {
-        setBoardSize, createArray, addX, addO, displayArray, checkWin, getArrayElement, onClick, getNextTurn
-    };
-})();
+    get nextTurn() {
+        return this._nextTurn;
+    }
+
+    set nextTurn(x){
+        this._nextTurn = x;
+    }
+}
 
 
-const displayGame = (function () {
-    let container = document.querySelector(".gameContainer");
-    const body = document.querySelector("body");
-    const board = document.createElement("div");
-    board.classList.add("gameBoard");
-    const restart = document.querySelector(".restart-btn");
 
-    const resultDiv = document.querySelector(".result-overlay");
-    const resultText = document.querySelector(".result");
-    const nextTurnDiv = document.querySelector(".next-move");
+class displayGame {
+    container = document.querySelector(".gameContainer");
+    body = document.querySelector("body");
+    board = document.createElement("div");
+    
+    restart = document.querySelector(".restart-btn");
 
-    function displayFirstTurn(){
-        nextTurnDiv.textContent = "Next move: " + gameBoard.getNextTurn();
+    resultDiv = document.querySelector(".result-overlay");
+    resultText = document.querySelector(".result");
+    nextTurnDiv = document.querySelector(".next-move");
+    gameBoardReference;
+
+    constructor(gameBoardReference){
+        this.gameBoardReference = gameBoardReference;
+        this.board.classList.add("gameBoard");
+        this.createBoard();
+        this.restart.addEventListener("click", () => this.restartGame());
+    }
+
+    displayFirstTurn() {
+        this.nextTurnDiv.textContent = "Next move: " + this.gameBoardReference.nextTurn;
     }
 
 
-    function createBoard() {
+    createBoard() {
         for (let i = 0; i < 9; i++) {
             let cell = document.createElement("div")
             cell.classList.add("gameCell");
             cell.dataset.cellIndex = i;
-            cell.addEventListener("click", () => gameBoard.onClick(i));
-            board.appendChild(cell);
+            cell.addEventListener("click", () => this.gameBoardReference.onClick(i));
+            this.board.appendChild(cell);
         }
-        container.appendChild(board);
-        displayFirstTurn();
+        this.container.appendChild(this.board);
+        this.displayFirstTurn();
     }
-    createBoard();
+    
 
-    function updateBoard(i, j, val) {
+    updateBoard(i, j, val) {
         let index = (i * 3) + j;
-        board.childNodes[index].textContent = val;
-        if (val === "O"){
-            displayNextTurn("X");
+        this.board.childNodes[index].textContent = val;
+        if (val === "O") {
+            this.displayNextTurn("X");
         } else {
-            displayNextTurn("O");
+            this.displayNextTurn("O");
         }
     }
 
-    function declareWinner(message) {
-        resultDiv.style.display = "flex";
-        resultText.textContent = message;
+    declareWinner(message) {
+        this.resultDiv.style.display = "flex";
+        this.resultText.textContent = message;
     }
 
-    function restartGame() {
-        resultDiv.style.display = "none";
-        board.innerHTML = "";
-        gameBoard.createArray();
-        createBoard();
+    restartGame() {
+        this.resultDiv.style.display = "none";
+        this.board.innerHTML = "";
+        this.gameBoardReference.createArray();
+        this.createBoard();
     }
 
-    function displayNextTurn(next){
-        nextTurnDiv.textContent = "Next move: " + next;
+    displayNextTurn(next) {
+        this.nextTurnDiv.textContent = "Next move: " + next;
     }
+}
 
-    restart.addEventListener("click", restartGame);
-
-    return {
-        updateBoard, declareWinner, restartGame, displayNextTurn
-    };
-})();
-
+const myGameBoard = new gameBoard();
+const myDisplayGame = new displayGame(myGameBoard);
+myGameBoard.setDisplay(myDisplayGame);
